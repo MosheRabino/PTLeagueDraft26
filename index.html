@@ -154,7 +154,7 @@
 <div class="container">
     <header>
         <h1>🏆 בנה את חמישיית החלומות שלך</h1>
-        <div class="subtitle">יש לך תקציב מוגבל של <strong>$18</strong> בדיוק כדי לבחור <strong>5 שחקנים</strong>.<br>הקבוצות חולקו אוטומטית לפי דירוג המדד שבאתר הליגה (מינימום 5 משחקים)</div>
+        <div class="subtitle">יש לך תקציב מוגבל של <strong>$18</strong> בדיוק כדי לבחור <strong>5 שחקנים</strong>.<br>הקבוצות חולקו אוטומטית לפי דירוג המדד שבאתר הליגה (מינימום של 5 משחקים)</div>
     </header>
 
     <div class="dashboard">
@@ -169,37 +169,37 @@
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-1"><span>שחקנים ב-$7</span> <span>מחיר: $7</span></div>
+        <div class="tier-header tier-1"><span>שחקנים ב-$7</span></div>
         <div class="players-grid" id="tier1-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-2"><span>שחקנים ב-$6</span> <span>מחיר: $6</span></div>
+        <div class="tier-header tier-2"><span>שחקנים ב-$6</span></div>
         <div class="players-grid" id="tier2-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-3"><span>שחקנים ב-$5</span> <span>מחיר: $5</span></div>
+        <div class="tier-header tier-3"><span>שחקנים ב-$5</span></div>
         <div class="players-grid" id="tier3-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-4"><span>שחקנים ב-$4</span> <span>מחיר: $4</span></div>
+        <div class="tier-header tier-4"><span>שחקנים ב-$4</span></div>
         <div class="players-grid" id="tier4-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-5"><span>שחקנים ב-$3</span> <span>מחיר: $3</span></div>
+        <div class="tier-header tier-5"><span>שחקנים ב-$3</span></div>
         <div class="players-grid" id="tier5-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-6"><span>שחקנים ב-$2</span> <span>מחיר: $2</span></div>
+        <div class="tier-header tier-6"><span>שחקנים ב-$2</span></div>
         <div class="players-grid" id="tier6-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-7"><span>שחקנים ב-$1</span> <span>מחיר: $1</span></div>
+        <div class="tier-header tier-7"><span>שחקנים ב-$1</span></div>
         <div class="players-grid" id="tier7-grid"></div>
     </div>
 
@@ -414,7 +414,6 @@
             selectedPlayers.splice(index, 1);
             card.classList.remove('selected');
         } else {
-            // עדכון בדיקת התקציב המקסימלי ל-18$
             if (totalSpent + cost > 18) {
                 alert("אין לך מספיק תקציב לשחקן הזה!");
                 return;
@@ -433,7 +432,6 @@
 
     function updateDashboard() {
         const totalSpent = selectedPlayers.reduce((sum, p) => sum + p.cost, 0);
-        // עדכון חישוב התקציב הנותר מתוך 18$
         const remaining = 18 - totalSpent;
         const count = selectedPlayers.length;
 
@@ -481,7 +479,6 @@
         const totalSpent = selectedPlayers.reduce((sum, p) => sum + p.cost, 0);
         const currentUrl = window.location.href; 
         
-        // עדכון התקציב בטקסט השיתוף ל-18$
         let shareText = `🏀 זאת חמישיית החלומות שלי ב-$18!\n\n`;
         
         selectedPlayers.forEach((p, index) => {
