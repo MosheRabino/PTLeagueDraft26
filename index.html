@@ -164,7 +164,7 @@
         </div>
         <div class="stat-box">
             <div class="stat-label">שחקנים שנבחרו</div>
-            <div id="count-display" class="stat-value">0 / 5</div>
+            <div id="count-display" class="stat-value" style="direction: ltr; display: inline-block;">0 / 5</div>
         </div>
     </div>
 
@@ -362,7 +362,7 @@
             { name: "בנימין אפלבוים", team: "קדם אברהם" },
             { name: "עמית נווה", team: "עמיחי" },
             { name: "הראל מרק", team: "ארזי הלבנון" },
-            { name: "נווה טרף", team: "עמיחי" },
+            { name: "נוה טרף", team: "עמיחי" },
             { name: "דניאל יהודה", team: "שירת גנים" },
             { name: "אליסף צור", team: "קדם אברהם" },
             { name: "מתן כשר", team: "גני תקווה" },
@@ -441,6 +441,7 @@
         const shareButton = document.getElementById('share-button');
 
         budgetDisplay.innerText = `$${remaining}`;
+        // עדכון הלוגיקה כדי להבטיח שהמספרים יישארו בסדר של 0 / 5 גם בעדכון דינמי
         countDisplay.innerText = `${count} / 5`;
 
         if (remaining === 0 && count === 5) {
