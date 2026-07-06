@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>&#1489;&#1504;&#1492; &#1488;&#1514; &#1504;&#1489;&#1495;&#1512;&#1514; &#1492;&#1495;&#1500;&#1493;&#1502;&#1493;&#1514; &#1513;&#1500;&#1498; - 5 &#1489;-14$</title>
+    <title>בנה את נבחרת החלומות שלך</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -72,23 +72,27 @@
         .tier-4 { border-color: #20bf6b; color: #20bf6b; }
         .tier-5 { border-color: #8854d0; color: #8854d0; }
         .tier-6 { border-color: #718093; color: #718093; }
+        .tier-7 { border-color: #a4b0be; color: #57606f; }
 
         .players-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 12px;
         }
         .player-card {
             background: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 10px;
-            padding: 14px 10px;
+            padding: 12px 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             user-select: none;
-            font-size: 14px;
-            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
         }
         .player-card:hover {
             transform: translateY(-3px);
@@ -100,6 +104,18 @@
             color: white;
             border-color: #0f2027;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .player-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .player-team {
+            font-size: 11px;
+            opacity: 0.7;
+            font-weight: normal;
+        }
+        .player-card.selected .player-team {
+            opacity: 0.85;
         }
         
         .selected-list {
@@ -125,7 +141,7 @@
             cursor: pointer;
             width: 100%;
             transition: background 0.2s;
-            display: none; /* מוסתר כברירת מחדל */
+            display: none;
             justify-content: center;
             align-items: center;
             gap: 8px;
@@ -137,88 +153,255 @@
 
 <div class="container">
     <header>
-        <h1>&#127942; &#1489;&#1504;&#1492; &#1488;&#1514; &#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1514; &#1492;&#1495;&#1500;&#1493;&#1502;&#1493;&#1514; &#1513;&#1500;&#1498;</h1>
-        <div class="subtitle">&#1497;&#1513; &#1500;&#1498; &#1514;&#1511;&#1510;&#1497;&#1489; &#1502;&#1493;&#1490;&#1489;&#1500; &#1513;&#1500; <strong>$14</strong> &#1489;&#1491;&#1497;&#1493;&#1511; &#1499;&#1491;&#1497; &#1500;&#1489;&#1495;&#1493;&#1512; <strong>5 שחקנים</strong>.<br>&#1492;&#1511;&#1489;&#1493;&#1510;&#1493;&#1514; &#1495;&#1493;&#1500;&#1511;&#1493; &#1488;&#1493;&#1496;&#1493;&#1502;&#1496;&#1497;&#1514; &#1500;&#1508;&#1497; &#1491;&#1497;&#1512;&#1493;&#1490; &#1492;&#1502;&#1491;&#1491; &#1513;&#1489;&#1488;&#1514;&#1512; &#1492;&#1500;&#1497;&#1490;&#1492; (&#1502;&#1497;&#1504;&#1497;&#1502;&#1493;&#1501; &#1513;&#1500; 10 &#1502;&#1491;&#1491;)</div>
+        <h1>🏆 בנה את חמישיית החלומות שלך</h1>
+        <div class="subtitle">יש לך תקציב מוגבל של <strong>$18</strong> בדיוק כדי לבחור <strong>5 שחקנים</strong>.<br>הקבוצות חולקו אוטומטית לפי דירוג המדד שבאתר הליגה (מינימום של 10 מדד)</div>
     </header>
 
     <div class="dashboard">
         <div class="stat-box">
-            <div class="stat-label">&#1514;&#1511;&#1510;&#1497;&#1489; &#1513;&#1504;&#1493;&#1514;&#1512;</div>
-            <div id="budget-display" class="stat-value">$14</div>
+            <div class="stat-label">תקציב שנותר</div>
+            <div id="budget-display" class="stat-value">$18</div>
         </div>
         <div class="stat-box">
-            <div class="stat-label">&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1513;&#1504;&#1489;&#1495;&#1512;&#1493;</div>
+            <div class="stat-label">שחקנים שנבחרו</div>
             <div id="count-display" class="stat-value">0 / 5</div>
         </div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-1"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$6</span> <span>&#1502;&#1495;&#1497;&#1512;: $6</span></div>
+        <div class="tier-header tier-1"><span>שחקנים ב-$7</span> <span>מחיר: $7</span></div>
         <div class="players-grid" id="tier1-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-2"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$5</span> <span>&#1502;&#1495;&#1497;&#1512;: $5</span></div>
+        <div class="tier-header tier-2"><span>שחקנים ב-$6</span> <span>מחיר: $6</span></div>
         <div class="players-grid" id="tier2-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-3"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$4</span> <span>&#1502;&#1495;&#1497;&#1512;: $4</span></div>
+        <div class="tier-header tier-3"><span>שחקנים ב-$5</span> <span>מחיר: $5</span></div>
         <div class="players-grid" id="tier3-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-4"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$3</span> <span>&#1502;&#1495;&#1497;&#1512;: $3</span></div>
+        <div class="tier-header tier-4"><span>שחקנים ב-$4</span> <span>מחיר: $4</span></div>
         <div class="players-grid" id="tier4-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-5"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$2</span> <span>&#1502;&#1495;&#1497;&#1512;: $2</span></div>
+        <div class="tier-header tier-5"><span>שחקנים ב-$3</span> <span>מחיר: $3</span></div>
         <div class="players-grid" id="tier5-grid"></div>
     </div>
 
     <div class="tier-section">
-        <div class="tier-header tier-6"><span>&#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1489;-$1</span> <span>&#1502;&#1495;&#1497;&#1512;: $1</span></div>
+        <div class="tier-header tier-6"><span>שחקנים ב-$2</span> <span>מחיר: $2</span></div>
         <div class="players-grid" id="tier6-grid"></div>
     </div>
 
+    <div class="tier-section">
+        <div class="tier-header tier-7"><span>שחקנים ב-$1</span> <span>מחיר: $1</span></div>
+        <div class="players-grid" id="tier7-grid"></div>
+    </div>
+
     <div class="selected-list">
-        <h3>&#1492;&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1492; &#1492;&#1504;&#1489;&#1495;&#1512;&#1514; &#1513;&#1500;&#1498;:</h3>
+        <h3>החמישייה הנבחרת שלך:</h3>
         <div class="chosen-names" id="chosen-container">
-            <span style="opacity: 0.6; font-style: italic;">&#1496;&#1512;&#1501; &#1504;&#1489;&#1495;&#1512;&#1493; &#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1500;&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1492;...</span>
+            <span style="opacity: 0.6; font-style: italic;">טרם נבחרו שחקנים לחמישייה...</span>
         </div>
-        <button id="share-button" class="share-btn" onclick="shareTeam()">&#128228; &#1513;&#1514;&#1508;&#1493; &#1488;&#1514; &#1492;&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1492; &#1513;&#1500;&#1499;&#1501;!</button>
+        <button id="share-button" class="share-btn" onclick="shareTeam()">📤 שתפו את חמישייתכם!</button>
     </div>
 </div>
 
 <script>
     const playersData = {
-        tier1: ["\u05ea\u05de\u05D9\u05E8 \u05E1\u05D5\u05D9\u05E1\u05D4", "\u05D2\u05D9\u05D0 \u05E7\u05E8\u05D0\u05D5\u05E1", "\u05D3\u05E7\u05DC \u05D0\u05EA\u05E8\u05D5\u05D2", "\u05DE\u05E2\u05D5\u05D6 \u05E0\u05D7", "\u05EA\u05DE\u05D9\u05E8 \u05D4\u05D5\u05DA", "\u05E9\u05D2\u05D9\u05D0 \u05E0\u05D3\u05DC\u05E8", "\u05E8\u05D5\u05E2\u05D9 \u05D0\u05D1\u05E8\u05E9\u05D8\u05E8\u05E7", "\u05DE\u05D5\u05D8\u05D9 \u05E9\u05D8\u05E8\u05DF", "\u05D0\u05DC\u05E8\u05E2\u05D9 \u05D2\u05D5\u05DC\u05D3", "\u05D1\u05E8\u05E7 \u05D2\u05D5\u05E8\u05D1\u05D9\u05E5\u05F3"],
-        tier2: ["\u05E2\u05D5\u05DE\u05E8 \u05D5\u05E8\u05D8\u05D4\u05D9\u05D9\u05DE\u05E8", "\u05E0\u05D5\u05D4 \u05D1\u05DF \u05D9\u05D0\u05D9\u05E8", "\u05EA\u05D5\u05DE\u05E8 \u05D7\u05D5\u05DE\u05DF", "\u05DE\u05EA\u05DF \u05E0\u05D7\u05D5\u05E9\u05EA\u05DF", "\u05E2\u05D9\u05D3\u05D5 \u05D8\u05D9\u05D9\u05D8\u05DC\u05D1\u05D5\u05DD"],
-        tier3: ["\u05D0\u05DE\u05D9\u05E8 \u05E1\u05D9\u05D2\u05DC", "\u05D0\u05DC\u05E2\u05D3 \u05E9\u05E4\u05D9\u05D2\u05DC", "\u05D9\u05D5\u05D0\u05D1 \u05D7\u05DB\u05DE\u05D5\u05DF", "\u05E6\u05D7 \u05E7\u05D5\u05E4\u05D9\u05D8\u05D5", "\u05D0\u05D5\u05E8\u05D9 \u05D4\u05D5\u05DC\u05E0\u05D3\u05E8", "\u05D0\u05D9\u05EA\u05D9 \u05E9\u05D9\u05DC\u05D4", "\u05E2\u05D9\u05D3\u05D5 \u05E9\u05E8\u05E2\u05D1\u05D9", "\u05DE\u05E9\u05D4 \u05D1\u05DF \u05D3\u05D5\u05D3"],
-        tier4: ["\u05E2\u05DE\u05D9\u05EA \u05E9\u05D2\u05D1", "\u05D9\u05D5\u05EA\u05DD \u05E8\u05E4\u05E4\u05D5\u05E8\u05D8", "\u05D3\u05D5\u05D1\u05D5\u05E9 \u05D2\u05E8\u05D0\u05D5\u05DB\u05E8", "\u05D9\u05D4\u05D5\u05E0\u05EA\u05DF \u05D4\u05E8\u05E8\u05D9", "\u05DE\u05EA\u05E0\u05D9\u05D4 \u05E4\u05E8\u05D5\u05D9\u05DC\u05D9\u05DA", "\u05D1\u05E8\u05E7 \u05D3\u05D5\u05D9\u05D3\u05D5\u05D1\u05D9\u05E5", "\u05E2\u05D9\u05D3\u05D5 \u05D7\u05DC\u05DE\u05D9\u05E9", "\u05DE\u05D0\u05D9\u05E8 \u05D4\u05E8\u05E9\u05E7\u05D5\u05D1\u05D9\u05E5", "\u05D0\u05E1\u05E3 \u05D0\u05D9\u05D6\u05E0\u05D1\u05E8\u05D2", "\u05E8\u05D5\u05E2\u05D9 \u05D0\u05DE\u05D9\u05E0\u05D5\u05D1", "\u05DE\u05EA\u05DF \u05D5\u05D9\u05D9\u05E1", "\u05D0\u05D9\u05D9\u05DC \u05E9\u05D9\u05E3", "\u05E8\u05D5\u05E2\u05D9 \u05E8\u05D9\u05E0\u05D4\u05E8\u05E5", "\u05D0\u05E9\u05E8 \u05E4\u05D9\u05D9\u05DF", "\u05D2\u05D5\u05DC\u05DF \u05D2\u05DC\u05D1\u05E8", "\u05E0\u05EA\u05DF \u05D2\u05E8\u05D0\u05D5\u05DB\u05E8", "\u05D0\u05D1\u05D9 \u05D1\u05DF \u05D3\u05D5\u05D3", "\u05D0\u05D5\u05E4\u05E7 \u05D6\u05D5\u05D4\u05E8"],
-        tier5: ["\u05D8\u05DC \u05D3\u05D5\u05D9\u05E3", "\u05DE\u05E9\u05D4 \u05E7\u05D9\u05E8\u05E9\u05E0\u05E8", "\u05D3\u05E0\u05D9 \u05E7\u05D0\u05D5\u05E4\u05DE\u05DF", "\u05E0\u05D5\u05E2\u05DD \u05D0\u05E9\u05DB\u05E0\u05D6\u05D9", "\u05D0\u05E8\u05D9\u05D0\u05DC \u05DE\u05E8\u05E7\u05D5\u05D1\u05D9\u05E5", "\u05D3\u05D5\u05D3 \u05DC\u05D7\u05DE\u05D9\u05E9", "\u05E8\u05D5\u05E2\u05D9 \u05D7\u05DB\u05DC\u05D9\u05DC\u05D9", "\u05D0\u05E8\u05D9\u05D0\u05DC \u05D9\u05E7\u05D5\u05EA\u05D9\u05D0\u05DC"],
-        tier6: ["\u05D9\u05D0\u05D9\u05E8 \u05DC\u05E4\u05D9\u05D3", "\u05D4\u05E8\u05D0\u05DC \u05D3\u05D5\u05D9\u05D8\u05E9", "\u05E2\u05D9\u05D3\u05D5 \u05E1\u05DC\u05DD", "\u05E2\u05D9\u05D3\u05DF \u05D7\u05D6\u05DF", "\u05E9\u05DC\u05D5 \u05D5\u05D9\u05D9\u05E1", "\u05DE\u05EA\u05DF \u05E9\u05D9\u05E0\u05E4\u05DC\u05D3", "\u05E7\u05D5\u05E8\u05DF \u05DE\u05D0\u05D9\u05E8\u05D5\u05D1\u05D9\u05E5\u05F3", "\u05D3\u05E0\u05D9\u05E1 \u05D1\u05D5\u05D1\u05D5\u05E8\u05D9\u05E7\u05D9\u05DF", "\u05DE\u05E9\u05D4 \u05D4\u05D5\u05E8\u05D1\u05D9\u05E5", "\u05D0\u05DC\u05E2\u05D3 \u05E6\u05D3\u05D5\u05E7", "\u05D0\u05E8\u05D6 \u05D0\u05D1\u05E8\u05E9\u05D8\u05E8\u05E7", "\u05D0\u05D9\u05EA\u05DE\u05E8 \u05E6\u05D9\u05DD", "\u05D0\u05D5\u05E8\u05D9 \u05D1\u05DF \u05E9\u05D7\u05E8", "\u05D2\u05E4\u05DF \u05D5\u05E8\u05D5\u05DF", "\u05D0\u05DC\u05E2\u05D3 \u05D8\u05D5\u05D1\u05DC", "\u05D3\u05D1\u05D9\u05E8 \u05DC\u05D5\u05E8\u05D9\u05D0", "\u05D3\u05D5\u05E8 \u05E7\u05D5\u05E4\u05D9\u05D8\u05D5", "\u05D9\u05D5\u05D0\u05D1 \u05D0\u05E9\u05DB\u05E0\u05D6\u05D9", "\u05E8\u05EA\u05DD \u05D0\u05E9\u05DB\u05E0\u05D6\u05D9", "\u05D0\u05D9\u05EA\u05DE\u05E8 \u05D1\u05E8\u05E7", "\u05D9\u05D5\u05E0\u05EA\u05DF \u05E9\u05D5\u05D1\u05D9", "\u05D0\u05DC\u05E2\u05D3 \u05D0\u05E9\u05E8", "\u05E4\u05DC\u05D2 \u05E9\u05DE\u05D7", "\u05D9\u05D4\u05D5\u05E0\u05EA\u05DF \u05E4\u05E8\u05D9\u05E9", "\u05E8\u05D5\u05E2\u05D9 \u05D5\u05D9\u05D9\u05E1", "\u05E9\u05D9 \u05E8\u05D7\u05DE\u05E0\u05D9", "\u05E8\u05D5\u05E2\u05D9 \u05D1\u05D9\u05D9\u05E0\u05D4\u05D5\u05E8\u05DF", "\u05D0\u05D1\u05D9\u05D1 \u05D5\u05D9\u05D9\u05E1", "\u05E0\u05D9\u05EA\u05D0\u05D9 \u05D0\u05DC\u05E0\u05E7\u05E8\u05D9", "\u05E0\u05E2\u05DD \u05E4\u05E8\u05E0\u05E7\u05DC", "\u05E0\u05D3\u05D1 \u05DB\u05D4\u05DF", "\u05D0\u05D5\u05D4\u05D3 \u05DE\u05D9\u05D6\u05DC\u05E1", "\u05D3\u05E0\u05D9\u05D0\u05DC \u05E4\u05E0\u05D8", "\u05D3\u05D5\u05D3 \u05D2\u05D5\u05D8\u05DE\u05DF", "\u05D0\u05D5\u05D4\u05D3 \u05E1\u05D5\u05D1\u05DC\u05DE\u05DF", "\u05D1\u05E2\u05D6 \u05D5\u05D5\u05DC\u05E9\u05D8\u05D9\u05D9\u05DF", "\u05DE\u05EA\u05DF \u05E8\u05D9\u05E0\u05D4\u05E8\u05E5", "\u05D9\u05D4\u05D5\u05D3\u05D4 \u05E4\u05D3\u05E8", "\u05D0\u05E8\u05D9\u05D0\u05DC \u05D4\u05D5\u05DC\u05E0\u05D3\u05E8", "\u05E2\u05D3\u05D9 \u05E0\u05E1\u05D9\u05DE\u05D9", "\u05D0\u05DC\u05D5\u05DF \u05E4\u05E8\u05D9\u05D3\u05DE\u05DF", "\u05D0\u05D5\u05E8\u05D9 \u05E4\u05D5\u05DC\u05E7", "\u05D0\u05D1\u05D9\u05E2\u05D3 \u05D5\u05D9\u05D9\u05E1", "\u05E0\u05D5\u05E2\u05DD \u05E9\u05D8\u05E8\u05E0\u05D1\u05E8\u05D2"]
+        tier1: [
+            { name: "תמיר סויה", team: "שירת גנים" },
+            { name: "גיא קראוס", team: "ארזי הלבנון" },
+            { name: "דקל אתרוג", team: "קדם אברהם" },
+            { name: "מעוז נח", team: "ניגוני חיים" },
+            { name: "תמיר הוך", team: "פסגת הדר" },
+            { name: "שגיר נדלר", team: "גני תקווה" },
+            { name: "רועי אברשטרק", team: "היכל גבריאל 2" },
+            { name: "מוטי שטרן", team: "ניגוני חיים" },
+            { name: "אלרעי גולד", team: "היכל גבריאל 1" },
+            { name: "ברק גורביץ'", team: "היכל גבריאל 3" }
+        ],
+        tier2: [
+            { name: "עומר ורטהיימר", team: "ארזי הלבנון" },
+            { name: "נוה בן יאיר", team: "קדם אברהם" },
+            { name: "תומר חומן", team: "גני תקווה" },
+            { name: "מתן נחושתן", team: "פסגת הדר" },
+            { name: "עידו טייטלבום", team: "עמיחי" }
+        ],
+        tier3: [
+            { name: "אמיר סיגל", team: "מוריה" },
+            { name: "אלעד שפיגל", team: "ארזי הלבנון" },
+            { name: "יואב חכמון", team: "עמיחי" },
+            { name: "צח קופיטו", team: "פסגת הדר" },
+            { name: "אורי הולנדר", team: "ניגוני חיים" },
+            { name: "איתי שילה", team: "קדם אברהם" },
+            { name: "עידו שרעבי", team: "עמיחי" },
+            { name: "משה בן דוד", team: "מוריה" }
+        ],
+        tier4: [
+            { name: "עמית שגב", team: "היכל גבריאל 3" },
+            { name: "יותם רפפורט", team: "היכל גבריאל 1" },
+            { name: "דובוש גראוכר", team: "שירת גנים" },
+            { name: "יהונתן הררי", team: "גני תקווה" },
+            { name: "מתניה פרוליך", team: "מוריה" },
+            { name: "ברק דוידוביץ", team: "היכל גבריאל 1" },
+            { name: "עידו חלמיש", team: "היכל גבריאל 3" },
+            { name: "מאיר הרשקוביץ", team: "קדם אברהם" },
+            { name: "אסף איזנברג", team: "היכל גבריאל 1" },
+            { name: "רועי אמינוב", team: "פסגת הדר" },
+            { name: "מתן וייס", team: "היכל גבריאל 2" },
+            { name: "אייל שיף", team: "ניגוני חיים" },
+            { name: "רועי רינהרץ", team: "נחלים" },
+            { name: "אשר פיין", team: "נחלים" },
+            { name: "גולן גלבר", team: "פסגת הדר" },
+            { name: "נתן גראוכר", team: "שירת גנים" },
+            { name: "אבי בן דוד", team: "היכל גבריאל 1" },
+            { name: "אופק זוהר", team: "פסגת הדר" }
+        ],
+        tier5: [
+            { name: "טל דויף", team: "גני תקווה" },
+            { name: "משה קירשנר", team: "היכל גבריאל 3" },
+            { name: "דני קאופמן", team: "היכל גבריאל 1" },
+            { name: "נועם אשכנזי", team: "היכל גבריאל 2" },
+            { name: "אריאל מרקוביץ", team: "נחלים" },
+            { name: "דוד לחמיש", team: "נחלים" },
+            { name: "רועי חכלילי", team: "עמיחי" },
+            { name: "אריאל יקותיאל", team: "ארזי הלבנון" }
+        ],
+        tier6: [
+            { name: "יאיר לפיד", team: "קדם אברהם" },
+            { name: "הראל דויטש", team: "היכל גבריאל 1" },
+            { name: "עידו סלם", team: "פסגת הדר" },
+            { name: "עידן חזן", team: "קדם אברהם" },
+            { name: "שלו וייס", team: "היכל גבריאל 2" },
+            { name: "מתן שינפלד", team: "נחלים" },
+            { name: "קורן מאירוביץ'", team: "גני תקווה" },
+            { name: "דניס בובוריקין", team: "קדם אברהם" },
+            { name: "משה הורביץ", team: "שירת גנים" },
+            { name: "אלעד צדוק", team: "מוריה" },
+            { name: "ארז אברשטרק", team: "היכל גבריאל 2" },
+            { name: "איתמר צים", team: "מוריה" },
+            { name: "אורי בן שחר", team: "היכל גבריאל 3" },
+            { name: "גפן ורון", team: "שירת גנים" },
+            { name: "אלעד טובל", team: "היכל גבריאל 3" },
+            { name: "דביר לוריא", team: "ארזי הלבנון" },
+            { name: "דור קופיטו", team: "פסגת הדר" },
+            { name: "יואב אשכנזי", team: "היכל גבריאל 2" },
+            { name: "רתם אשכנזי", team: "היכל גבריאל 2" },
+            { name: "איתמר ברק", team: "היכל גבריאל 2" },
+            { name: "יונתן שובי", team: "ניגוני חיים" },
+            { name: "אלעד אשר", team: "ארזי הלבנון" },
+            { name: "פלג שמח", team: "עמיחי" },
+            { name: "יהונתן פריש", team: "היכל גבריאל 3" },
+            { name: "רועי וייס", team: "היכל גבריאל 3" },
+            { name: "שי רחמני", team: "פסגת הדר" },
+            { name: "רועי ביינהורן", team: "נחלים" },
+            { name: "אביב וייס", team: "היכל גבריאל 1" },
+            { name: "ניתאי אלנקרי", team: "מוריה" },
+            { name: "נעם פרנקל", team: "מוריה" },
+            { name: "נדב כהן", team: "ארזי הלבנון" },
+            { name: "אוהד מיזלס", team: "ניגוני חיים" },
+            { name: "דניאל פנט", team: "ניגוני חיים" },
+            { name: "דוד גוטמן", team: "נחלים" },
+            { name: "אוהד סובלמן", team: "היכל גבריאל 3" },
+            { name: "בועז וולשטיין", team: "ארזי הלבנון" },
+            { name: "מתן רינהרץ", team: "נחלים" },
+            { name: "יהודה פדר", team: "ארזי הלבנון" },
+            { name: "אריאל עמיר", team: "ניגוני חיים" },
+            { name: "עדי נסימי", team: "ניגוני חיים" },
+            { name: "אלון פרידמן", team: "גני תקווה" },
+            { name: "אורי פולק", team: "היכל גבריאל 2" },
+            { name: "אביעד וייס", team: "היכל גבריאל 2" },
+            { name: "נועם שטרנברג", team: "מוריה" }
+        ],
+        tier7: [
+            { name: "איתי בלומשטיין", team: "היכל גבריאל 1" },
+            { name: "תומר קסוקר", team: "גני תקווה" },
+            { name: "קובי גולן", team: "נחלים" },
+            { name: "עידו שיף", team: "ניגוני חיים" },
+            { name: "יוני שיף", team: "ניגוני חיים" },
+            { name: "יונתן שטרק", team: "ארזי הלבנון" },
+            { name: "גולן סנד", team: "שירת גנים" },
+            { name: "גילעד מלכי", team: "גני תקווה" },
+            { name: "עידו קאופמן", team: "נחלים" },
+            { name: "לביא שינפלד", team: "נחלים" },
+            { name: "עומר פרקש", team: "היכל גבריאל 3" },
+            { name: "נוה ותקין", team: "ארזי הלבנון" },
+            { name: "יואב פרקש", team: "היכל גבריאל 3" },
+            { name: "יהונתן ברזל", team: "היכל גבריאל 1" },
+            { name: "איתי קאופמן", team: "נחלים" },
+            { name: "עידן עקירוב", team: "היכל גבריאל 1" },
+            { name: "גלעד הודדן", team: "קדם אברהם" },
+            { name: "יאיר רחמני", team: "פסגת הדר" },
+            { name: "אור בורגר", team: "מוריה" },
+            { name: "עמיקם שמש", team: "עמיחי" },
+            { name: "יובל אורלנסקי", team: "שירת גנים" },
+            { name: "אדיר סובלמן", team: "היכל גבריאל 3" },
+            { name: "אריאל ישראלי", team: "שירת גנים" },
+            { name: "ברק בומבך", team: "מוריה" },
+            { name: "שלומי אברשטרק", team: "היכל גבריאל 2" },
+            { name: "רועי רוזנבלום", team: "פסגת הדר" },
+            { name: "אורי פנסטור", team: "שירת גנים" },
+            { name: "מוראל אברהם", team: "ניגוני חיים" },
+            { name: "אביתר הלמן", team: "היכל גבריאל 1" },
+            { name: "רועי שניצר", team: "היכל גבריאל 3" },
+            { name: "נעם פולק", team: "עמיחי" },
+            { name: "עדיאל קליין", team: "עמיחי" },
+            { name: "עמית רוזנבלט", team: "שירת גנים" },
+            { name: "רזיאל משיח", team: "גני תקווה" },
+            { name: "אלרואי אברהם", team: "קדם אברהם" },
+            { name: "איתי זקרי", team: "ארזי הלבנון" },
+            { name: "אמיתי ואך", team: "עמיחי" },
+            { name: "אוריה יוקר", team: "קדם אברהם" },
+            { name: "אייל לורש", team: "מוריה" },
+            { name: "בנימין אפלבוים", team: "קדם אברהם" },
+            { name: "עמית נווה", team: "עמיחי" },
+            { name: "הראל מרק", team: "ארזי הלבנון" },
+            { name: "נווה טרף", team: "עמיחי" },
+            { name: "דניאל יהודה", team: "שירת גנים" },
+            { name: "אליסף צור", team: "קדם אברהם" },
+            { name: "מתן כשר", team: "גני תקווה" },
+            { name: "איתם בן יאיר", team: "קדם אברהם" },
+            { name: "אורי ישראלי", team: "שירת גנים" },
+            { name: "יובל בר דוד", team: "מוריה" }
+        ]
     };
 
     let selectedPlayers = [];
 
     function initGame() {
-        renderTier('tier1-grid', playersData.tier1, 6);
-        renderTier('tier2-grid', playersData.tier2, 5);
-        renderTier('tier3-grid', playersData.tier3, 4);
-        renderTier('tier4-grid', playersData.tier4, 3);
-        renderTier('tier5-grid', playersData.tier5, 2);
-        renderTier('tier6-grid', playersData.tier6, 1);
+        renderTier('tier1-grid', playersData.tier1, 7);
+        renderTier('tier2-grid', playersData.tier2, 6);
+        renderTier('tier3-grid', playersData.tier3, 5);
+        renderTier('tier4-grid', playersData.tier4, 4);
+        renderTier('tier5-grid', playersData.tier5, 3);
+        renderTier('tier6-grid', playersData.tier6, 2);
+        renderTier('tier7-grid', playersData.tier7, 1);
     }
 
     function renderTier(gridId, players, cost) {
         const grid = document.getElementById(gridId);
-        players.forEach(name => {
+        players.forEach(player => {
             const card = document.createElement('div');
             card.className = 'player-card';
-            card.innerText = name;
-            card.onclick = () => togglePlayer(card, name, cost);
+            
+            const nameEl = document.createElement('span');
+            nameEl.className = 'player-name';
+            nameEl.innerText = player.name;
+            
+            const teamEl = document.createElement('span');
+            teamEl.className = 'player-team';
+            teamEl.innerText = player.team;
+            
+            card.appendChild(nameEl);
+            card.appendChild(teamEl);
+            
+            card.onclick = () => togglePlayer(card, player.name, cost);
             grid.appendChild(card);
         });
     }
@@ -231,12 +414,13 @@
             selectedPlayers.splice(index, 1);
             card.classList.remove('selected');
         } else {
-            if (totalSpent + cost > 14) {
-                alert("&#1488;&#1497;&#1503; &#1500;&#1498; &#1502;&#1505;&#1508;&#1497;&#1511; &#1514;&#1511;&#1510;&#1497;&#1489; &#1500;&#1513;&#1495;&#1511;&#1503; &#1492;&#1494;&#1492;!");
+            // עדכון בדיקת התקציב המקסימלי ל-18$
+            if (totalSpent + cost > 18) {
+                alert("אין לך מספיק תקציב לשחקן הזה!");
                 return;
             }
             if (selectedPlayers.length >= 5) {
-                alert("&#1488;&#1497; &#1488;&#1508;&#1513;&#1512; &#1500;&#1489;&#1495;&#1493;&#1512; &#1497;&#1493;&#1514;&#1512; &#1502;-5 &#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1500;&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1492;!");
+                alert("אי אפשר לבחור יותר מ-5 שחקנים לחמישייה!");
                 return;
             }
             
@@ -249,7 +433,8 @@
 
     function updateDashboard() {
         const totalSpent = selectedPlayers.reduce((sum, p) => sum + p.cost, 0);
-        const remaining = 14 - totalSpent;
+        // עדכון חישוב התקציב הנותר מתוך 18$
+        const remaining = 18 - totalSpent;
         const count = selectedPlayers.length;
 
         const budgetDisplay = document.getElementById('budget-display');
@@ -280,7 +465,6 @@
             });
         }
 
-        // שינוי כאן: כפתור השיתוף יוצג רק אם נבחרו בדיוק 5 שחקנים
         if (count === 5) {
             shareButton.style.display = 'flex';
         } else {
@@ -290,32 +474,33 @@
 
     function shareTeam() {
         if (selectedPlayers.length !== 5) {
-            alert(`&#1495;&#1493;&#1489;&#1492; &#1500;&#1489;&#1495;&#1493;&#1512; &#1489;&#1491;&#1497;&#1493;&#1511; 5 &#1513;&#1495;&#1511;&#1504;&#1497;&#1501; &#1499;&#1491;&#1497; &#1500;&#1513;&#1514;&#1507;! (&#1499;&#1512;&#1490;&#1506; &#1489;&#1495;&#1512;&#1514; ${selectedPlayers.length})`);
+            alert(`חובה לבחור בדיוק 5 שחקנים כדי לשתף! (כרגע בחרת ${selectedPlayers.length})`);
             return;
         }
 
         const totalSpent = selectedPlayers.reduce((sum, p) => sum + p.cost, 0);
         const currentUrl = window.location.href; 
         
-        let shareText = `&#127936; &#1494;&#1488;&#1514; &#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1514; &#1492;&#1495;&#1500;&#1493;&#1502;&#1493;&#1514; &#1513;&#1500;&#1497; &#1489;-$14!\n\n`;
+        // עדכון התקציב בטקסט השיתוף ל-18$
+        let shareText = `🏀 זאת חמישיית החלומות שלי ב-$18!\n\n`;
         
         selectedPlayers.forEach((p, index) => {
             shareText += `${index + 1}. ${p.name} ($${p.cost})\n`;
         });
         
-        shareText += `\n&#1505;&#1492;"&#1499; &#1513;&#1495;&#1511;&#1504;&#1497;&#1501;: ${selectedPlayers.length}/5\nתקציב שנוצל: $${totalSpent}/$14\n\n`;
-        shareText += `&#1489;&#1504;&#1493; &#1488;&#1514; &#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1514; &#1492;&#1495;&#1500;&#1493;&#1502;&#1493;&#1514; &#1513;&#1500;&#1499;&#1501; &#1490;&#1501; &#1499;&#1488;&#1503; &#128071;\n${currentUrl}`;
+        shareText += `\nסה"כ שחקנים: ${selectedPlayers.length}/5\nתקציב שנוצל: $${totalSpent}/$18\n\n`;
+        shareText += `בנו את חמישיית החלומות שלכם גם כאן 👇\n${currentUrl}`;
 
         if (navigator.share) {
             navigator.share({
-                title: '&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1514; &#1492;&#1495;&#1500;&#1493;&#1502;&#1493;&#1514; &#1513;&#1500;&#1497;',
+                title: 'חמישיית החלומות שלי',
                 text: shareText
             }).catch(err => console.log(err));
         } else {
             navigator.clipboard.writeText(shareText).then(() => {
-                alert('&#1492;&#1495;&#1502;&#1497;&#1513;&#1497;&#1497;&#1492; &#1493;&#1492;&#1511;&#1497;&#1513;&#1493;&#1512; &#1492;&#1493;&#1506;&#1514;&#1511;&#1493; &#1500;&#1500;&#1493;&#1495;! &#1506;&#1499;&#1513;&#1497;&#1493; &#1488;&#1508;&#1513;&#1512; &#1500;&#1492;&#1491;&#1489;&#1497;&#1511; &#1493;&#1500;&#1513;&#1514;&#1507; &#1489;&#1499;&#1500; &#1502;&#1511;&#1493;&#1501;.');
+                alert('החמישייה והקישור הועתקו ללוח! עכשיו אפשר להדביק ולשתף בכל מקום.');
             }).catch(err => {
-                alert('&#1513;&#1490;&#1497;&#1488;&#1492; &#1489;&#1492;&#1506;&#1514;&#1511;&#1514; &#1492;&#1496;&#1511;&#1505;&#1496;.');
+                alert('שגיאה בהעתקת הטקסט.');
             });
         }
     }
